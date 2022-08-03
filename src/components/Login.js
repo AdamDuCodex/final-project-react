@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import LabeledTextInput from "./LabeledTextInput";
+import { fetchTestUserDataByEmail } from "../api/api";
 
 const validUser = {
     id: 1,
@@ -21,9 +22,10 @@ export default function Login() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        if (email === validUser.email && password === validUser.password) {
+        const user = fetchTestUserDataByEmail(email);
+        if (user && password === validUser.password) {
             setshowLoginError(false);
-            setLoggedInUser(validUser);
+            setLoggedInUser(user);
             navigate("/home");
         } else {
             setshowLoginError(true);

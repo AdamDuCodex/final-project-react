@@ -1,38 +1,36 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import {DataContext} from './DataProvider';
 
 export default function Details() {
 
     const {id} = useParams();
-    const [products, setProducts] = useContext(DataContext);
+    const [products] = useContext(DataContext);
+    const imgDiv = useRef();
 
-    const details = products.filter((product, index) => {
+    const details = products.filter((product) => {
         return product.id === id
     })
-    console.log(details)
+
+    const handleMouseMove = e => {
+        const {left, top, width, height} = e.target.getBoundingClientRect();
+        const x = (e.pageX - left) / width * 100
+        const y = (e.pageY - top) / height * 100
+        imgDiv.current.style.backgroundPosition = `${x}% ${y}%`
+    }
 
     return (
         <>
             {
                 details.map(product => (
                     <div className="details" key={product.id}>
-                        <div className="img-container" style={{backgroundImage: `url(${product.image})`}}>
-                            <div className="box-details">
-                                <h2>{product.title}</h2>
-                                <h3>${product.price}</h3>
-                                <h4>{product.category}</h4>
-                                <p>{product.description}</p>
-
-                                <div className="thumb">
-                                    {
-                                        product.image.map((img, index) => (
-                                            <img src={img} alt="" key={index} />
-                                        ))
-                                    }
-                                </div>
-                                <button className="cart">Add to Cart</button>
-                            </div>
+                        <div className="img-container" onMouseMove={handleMouseMove} style={{backgroundImage: `url(${product.image})`}} ref={imgDiv} onMouseLeave={() => imgDiv.current.style.backgroundPosition = `top`} />
+                        <div className="box-details">
+                            <h2 title={product.title}>{product.title}</h2>
+                            <h3>${product.price}</h3>
+                            <h4>{product.category}</h4>
+                            <p>{product.description}</p>
+                            <button className="cart">Add to Cart</button>
                         </div>
                     </div>
                 ))
