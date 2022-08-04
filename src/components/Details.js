@@ -1,11 +1,14 @@
 import React, {useContext, useState, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import {DataContext} from './DataProvider';
+import { Link } from 'react-router-dom';
 
 export default function Details() {
 
     const {id} = useParams();
-    const [products] = useContext(DataContext);
+    const value = useContext(DataContext);
+    const [products] = value.products;
+    const addCart = value.addCart;
     const imgDiv = useRef();
 
     const details = products.filter((product) => {
@@ -30,7 +33,7 @@ export default function Details() {
                             <h3>${product.price}</h3>
                             <h4>{product.category}</h4>
                             <p>{product.description}</p>
-                            <button className="cart">Add to Cart</button>
+                            <Link to="/cart" className="cart" onClick={() => addCart(product.id)}>Add to Cart</Link>
                         </div>
                     </div>
                 ))

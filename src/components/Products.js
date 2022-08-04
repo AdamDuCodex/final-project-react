@@ -4,7 +4,9 @@ import { NavLink } from 'react-router-dom';
 
 export default function Products() {
     
-    const [products] = useContext(DataContext);
+    const value = useContext(DataContext);
+    const [products] = value.products;
+    const addCart = value.addCart;
 
     return (
         
@@ -20,9 +22,9 @@ export default function Products() {
                             <h3 title={product.title}>
                             <NavLink to={`/products/${product.id}`}>{product.title}</NavLink>
                             </h3>
-                            <p className='limit'>{product.description}</p>
-                            <h4>{product.price}</h4>
-                            <button>Add to cart</button>
+                            <p>{product.description}</p>
+                            <h4>${product.price}</h4>
+                            <button onClick={() => addCart(product.id)}>Add to cart</button>
                         </div>
                     </div>
                     </>

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Menu from './svg/bars-solid.svg';
 import Close from './svg/xmark-solid.svg';
-import { NavLink } from 'react-router-dom';
+import Cart from './svg/cart-shopping-solid.svg';
+import { NavLink, Link } from 'react-router-dom';
+import { DataContext } from './DataProvider';
 
 export function styleByActiveStatus(isActive) {
   return isActive
@@ -11,7 +13,9 @@ export function styleByActiveStatus(isActive) {
 
 export default function Header() {
 
-  const [menu, setMenu] = useState(false)
+  const [menu, setMenu] = useState(false);
+  const value = useContext(DataContext);
+  const [cart] = value.cart;
 
   const toggleMenu = () => {
     setMenu(!menu)
@@ -23,6 +27,10 @@ export default function Header() {
 
   return (
       <header>
+        <div className="menu" onClick={toggleMenu}>
+          <img src={Menu} alt="" width="30"/>
+        </div>
+
         <div className="logo">
           <h1><NavLink to="/products">Fake Store</NavLink></h1>
         </div>
@@ -36,8 +44,12 @@ export default function Header() {
             <img src={Close} alt="" width="30" className="menu"/>
           </li>
         </ul>
-        <div className="menu" onClick={toggleMenu}>
-          <img src={Menu} alt="" width="30"/>
+        
+        <div className='cart-icon'>
+          <span>{cart.length}</span>
+          <Link to="/cart">
+            <img src={Cart} alt="" width="30" />
+          </Link>
         </div>
       </header>
   )
